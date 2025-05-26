@@ -64,7 +64,7 @@ def decidi_colore(hsv):
     h = hsv[0]
     for nome_colore, valori in COLORI.items():
         if h >= valori[0] - 10 and h <= valori[0] + 10:  # Confronto con una tolleranza
-            print(f"[🧠] Colore rilevato: {nome_colore}")
+            print(f"Colore rilevato: {nome_colore}")
             return COLORI[nome_colore][2]  # Restituisce il valore associato al colore
     print("Nessun colore corrispondente trovato.")
     return 0  # Valore di default se non trovato
