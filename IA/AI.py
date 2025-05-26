@@ -93,7 +93,7 @@ def main():
 
     invia_comando(valore)
 
-    print("[✅] Fine processo.")
+    print("Fine processo.")
 
 if __name__ == "__main__":
     main()
