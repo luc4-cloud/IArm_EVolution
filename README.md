@@ -53,6 +53,7 @@ Dopo la creazione dell’ambiente virtuale opero all’interno di esso e vado a 
 
 - **OpenCV**
 - **Numpy**
+- **pyserial**
 
 Per scaricare tutto il necessario aprire il terminale e:
 
@@ -66,6 +67,12 @@ pip install opencv-python
 
 ```jsx
 pip install numpy
+```
+
+1. pyserial
+
+```jsx
+pip install pyserial
 ```
 
 ### PASSO 3 - Implementazione dataset dei colori
