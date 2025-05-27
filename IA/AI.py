@@ -11,89 +11,79 @@ import cv2
 import numpy as np
 import serial
 import time
-import json
 
-# ===== PARAMETRI =====
-DEVICE_USB = "/dev/ttyUSB0"   
+# === CONFIG ===
+DEVICE_USB = "/dev/ttyACM0"  # Cambia se necessario
 BAUDRATE = 9600
-DIMENSIONE_FRAME = 200
-DATASET_FILE = "/mnt/data/color_dataset.json"  # Percorso del file JSON -> da modificare quando lo carico su RASP
+DIM_FRAME = 200
 
-
-# ===== INIZIALIZZA COMUNICAZIONE SERIALE =====
+# === INIZIALIZZA SERIAL ===
 try:
     ser = serial.Serial(DEVICE_USB, BAUDRATE, timeout=1)
-    time.sleep(2)  # attesa per stabilire connessione
-    print("[✓] Connessione seriale stabilita.")
+    time.sleep(2)
+    print("[✓] Porta seriale aperta.")
 except Exception as e:
-    print(f"[!] Errore nella connessione seriale: {e}")
+    print(f"[!] Errore apertura seriale: {e}")
     ser = None
 
-# ===== CARICA COLORI DAL JSON =====
-try:
-    with open(DATASET_FILE, "r") as f:
-        COLORI = json.load(f)
-    print("Dataset colori caricato.")
-except Exception as e:
-    print(f"Errore nel caricamento del dataset: {e}")
-    COLORI = {}
-
-# ===== SCATTA FOTO ======
-#scatta una foto con la fotocamera e ritorna il frame di essa
+# === FUNZIONE: scatta foto ===
 def scatta_foto():
     cap = cv2.VideoCapture(0)
-    time.sleep(1)  # attesa per il focus
+    time.sleep(2)  # attesa attivazione
+    for _ in range(5):
+        cap.read()  # scarta primi frame
     ret, frame = cap.read()
     cap.release()
     if not ret:
         raise Exception("Errore nella cattura dell'immagine")
     return frame
 
-
-# ===== ESTRAI COLORE =====
-#dato il frame estra il colore dell'oggetto
+# === FUNZIONE: estrai HSV medio ===
 def estrai_colore_dominante(img):
-    resized = cv2.resize(img, (DIMENSIONE_FRAME, DIMENSIONE_FRAME))
+    resized = cv2.resize(img, (DIM_FRAME, DIM_FRAME))
     hsv = cv2.cvtColor(resized, cv2.COLOR_BGR2HSV)
     media = np.mean(hsv.reshape(-1, 3), axis=0)
-    return tuple(media.astype(int))  # formato del valor e(H, S, V)
+    return tuple(media.astype(int))  # (H, S, V)
 
-# ===== DECIDI COLORE =====
-#funzione che esamina il colore estratto e lo confronta con il dataset caricato
-def decidi_colore(hsv):
+# === FUNZIONE: decidi valore da inviare in base al colore ===
+def decidi_valore(hsv):
     h = hsv[0]
-    for nome_colore, valori in COLORI.items():
-        if h >= valori[0] - 10 and h <= valori[0] + 10:  # Confronto con una tolleranza
-            print(f"Colore rilevato: {nome_colore}")
-            return COLORI[nome_colore][2]  # Restituisce il valore associato al colore
-    print("Nessun colore corrispondente trovato.")
-    return 0  # Valore di default se non trovato
+    if (h < 10 or h > 160):   # ROSSO (Hue 0–10 e 160–180)
+        print("Colore rilevato: ROSSO")
+        return 1
+    elif 40 <= h <= 85:       # VERDE (Hue 40–85)
+        print("Colore rilevato: VERDE")
+        return 2
+    elif 100 <= h <= 130:     # BLU (Hue 100–130)
+        print("Colore rilevato: BLU")
+        return 3
+    else:
+        print("Colore non riconosciuto.")
+        return 0  # Nessun colore valido
 
-# ===== INVIA COMANDO =====
-#Funzione che invia ad Arduino il valore del movimento da far effettuare al braccio
+# === FUNZIONE: invia comando ===
 def invia_comando(valore):
     comando = f"{valore}\n"
     if ser:
         ser.write(comando.encode())
-        print(f"Comando inviato: {comando.strip()}")
+        print(f"[→] Inviato ad Arduino: {valore}")
     else:
-        print("Serial non disponibile")
+        print("[!] Porta seriale non disponibile.")
 
 # === MAIN ===
 def main():
-    print("Scatto della foto in corso...")
+    print("Acquisizione immagine...")
     frame = scatta_foto()
 
-    print("Estrazione colore...")
-    colore = estrai_colore_dominante(frame)
-    print(f"Colore HSV medio: {colore}")
+    print("Elaborazione colore...")
+    hsv = estrai_colore_dominante(frame)
+    print(f"[HSV] Media: {hsv}")
 
-    valore = decidi_colore(colore)
-    print(f"Valore da inviare: {valore}")
-
+    valore = decidi_valore(hsv)
+    print("Valore passato: "valore)
     invia_comando(valore)
 
-    print("Fine processo.")
+    print(" Operazione completata.")
 
 if __name__ == "__main__":
     main()
