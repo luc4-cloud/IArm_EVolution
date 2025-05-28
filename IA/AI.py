@@ -72,15 +72,25 @@ def invia_comando(valore):
 
 # === MAIN ===
 def main():
+<<<<<<< HEAD
     print("Acquisizione immagine...")
     frame = scatta_foto()
 
     print("Elaborazione colore...")
+=======
+    print("[📸] Acquisizione immagine...")
+    frame = scatta_foto()
+
+    print("[🎨] Elaborazione colore...")
+>>>>>>> 42cc626 (bho)
     hsv = estrai_colore_dominante(frame)
     print(f"[HSV] Media: {hsv}")
 
     valore = decidi_valore(hsv)
+<<<<<<< HEAD
     print("Valore passato: "valore)
+=======
+>>>>>>> 42cc626 (bho)
     invia_comando(valore)
 
     print(" Operazione completata.")
