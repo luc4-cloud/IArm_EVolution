@@ -132,4 +132,11 @@ Successivamente copiare il contenuto del file "AI.py" dalla repository e incolla
 
 ### PASSO 5 - Collegare la WEBCAM a Raspberry
 
-Per il corretto funzionamento è necessario che venga collegata ad una porta usb di Raspberry una videocamera (Non è necessario la camera proprietaria)
+Per il corretto funzionamento è necessario che venga collegata ad una porta usb di Raspberry una videocamera (Non è necessario la camera proprietaria).
+
+N.B. Per verificare che la fotocamera sia correttamente collegata: aprire il terminale e scrivere il seguente comando
+```jsx
+lsusb
+```
+
+Se collegata correttamente si vedrà il modello della webcam collegata nella porta USB inserita
