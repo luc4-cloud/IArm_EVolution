@@ -91,32 +91,7 @@ per implementare il dataset è necessario:
 nano color_dataset.json
 ```
 
-1. Inserire i colori da far riconoscere 
-
-```python
-{
-  "rosso": [0, 255, 255],
-  "arancione": [15, 255, 255],
-  "giallo": [30, 255, 255],
-  "verde": [60, 255, 255],
-  "turchese": [90, 255, 255],
-  "azzurro": [100, 200, 255],
-  "blu": [120, 255, 255],
-  "indaco": [135, 255, 255],
-  "viola": [150, 255, 255],
-  "rosa": [170, 150, 255],
-  "bianco": [0, 0, 255],
-  "grigio": [0, 0, 127],
-  "nero": [0, 0, 0],
-  "marrone": [20, 255, 100],
-  "lime": [75, 255, 255],
-  "acqua": [85, 200, 255],
-  "fucsia": [160, 255, 255],
-  "oro": [25, 255, 200],
-  "argento": [0, 0, 200],
-  "beige": [20, 50, 220]
-}
-```
+1. Inserire i colori da far riconoscere - utilizza il file "color_dataset.json" nella cartella IA
 
 ### PASSO 4 - Creazione del codice
 
