@@ -166,7 +166,8 @@ void loop() {
     int valoreRicevuto = data.toInt();
 
     servoBase.write(60);
-    servoGomito.write(130);
+    delay(500);
+    servoGomito.write(160);
     servoPinza.write(90);
     delay(800);
     
@@ -176,19 +177,23 @@ void loop() {
       case 1: // rosso
         // apertura pinza
         // apri la pinza solo se è chiusa
-        servoBase.write(120);
+        servoPinza.write(60);
         delay(800);
+
         servoGomito.write(140);
         delay(800);
-        servoPinza.write(90);
+
+        servoBase.write(80);
         delay(800);
+        
         servoPinza.write(30);
         delay(500);
         //oggetto preso e sollevato
-        servoBase.write(40);
+        servoBase.write(140);
         delay(800);
         servoPinza.write(90);
         delay(800);
+        
         // Solleva braccio
         
         // movimento effettivo braccio
@@ -206,12 +211,16 @@ void loop() {
       case 2: // verde
         // apertura pinza
         // apri la pinza solo se è chiusa
-        servoBase.write(120);
+        servoPinza.write(60);
         delay(800);
+
         servoGomito.write(140);
         delay(800);
-        servoPinza.write(90);
+
+        servoBase.write(10);
         delay(800);
+        
+        
         servoPinza.write(30);
         delay(500);
         //oggetto preso e sollevato
@@ -233,16 +242,20 @@ void loop() {
         break;
 
       case 3: // blu
-        servoBase.write(120);
+        servoPinza.write(60);
         delay(800);
+
         servoGomito.write(140);
         delay(800);
-        servoPinza.write(90);
+
+        servoBase.write(50);
         delay(800);
+        
+        
         servoPinza.write(30);
         delay(500);
         //oggetto preso e sollevato
-        servoBase.write(90);
+        servoBase.write(140);
         delay(800);
         servoPinza.write(90);
         delay(800);
